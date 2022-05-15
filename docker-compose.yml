@@ -11,10 +11,16 @@ services:
       - esdata:/usr/share/elasticsearch/data
     environment:
       - discovery.type=single-node
+      - XPACK_SECURITY_ENABLED=true # X-Pack の有効化（パスワード有効化）
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
   kibana:
     image: kibana:7.2.1
     ports:
       - 5601:5601
+    environment:
+      # Kibana が起動時に Elasticsearch へ接続するための認証情報をセット
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
     depends_on:
       - elasticsearch
 volumes:
